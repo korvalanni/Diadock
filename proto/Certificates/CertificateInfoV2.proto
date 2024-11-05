@@ -1,4 +1,4 @@
-package Diadoc.Api.Proto;
+package Diadoc.Api.Proto.Certificates;
 
 option java_outer_classname = "CertificateInfoV2Protos";
 
@@ -18,14 +18,14 @@ message CertificateInfoV2 {
 	optional bool IsDefault = 13;
 	optional CertificateSubjectType SubjectType = 14;
 	repeated CertificateUsage Usages = 15;
-	optional DssType DssType = 16;
+	optional DssCertificateType DssType = 16;
 }
 
 enum CertificateType {
-	UnknownCertificateType = 0;
-	TokenCertificateType = 1;
-	DssCertificateType = 2;
-	KonturCertificateType = 3;
+	Unknown = 0;
+	Token = 1;
+	Dss = 2;
+	KonturCertificate = 3;
 }
 
 enum CertificateSubjectType {
@@ -35,7 +35,7 @@ enum CertificateSubjectType {
 	PhysicalPerson = 3;
 }
 
-enum DssType {
+enum DssCertificateType {
 	UnknownDssType = 0;
 	MyDss = 1;
 	KSignServer = 2;

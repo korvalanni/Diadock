@@ -1,5 +1,5 @@
-import "CertificateInfoV2.proto";
-package Diadoc.Api.Proto;
+import "Certificates/CertificateInfoV2.proto";
+package Diadoc.Api.Proto.Certificates;
 
 option java_outer_classname = "CertificateListProtos";
 
