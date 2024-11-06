@@ -124,26 +124,6 @@ public ProcessSettings GetBuildCMakeSettings()
 	return cmakeBuildSettings;
 }
 
-public IEnumerable<FilePath> PatchJavaProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
-{
-	foreach (var file in files)
-	{
-		var relativeFile = sourceProtoDir.GetRelativePath(file);
-		var destinationFile = destinationProtoDir.CombineWithFilePath(relativeFile);
-		var destinationDirectory = destinationFile.GetDirectory();
-		if (!DirectoryExists(destinationDirectory))
-			CreateDirectory(destinationDirectory);
-
-		CopyFile(file, destinationFile);
-		var javaOuterClassName = relativeFile.GetFilenameWithoutExtension().FullPath
-			.Replace("-", "_")
-			.Replace(".", "_");
-		System.IO.File.AppendAllText(destinationFile.FullPath, string.Format("\n\noption java_outer_classname = \"{0}Protos\";", javaOuterClassName));
-		yield return destinationFile;
-	}
-}
-
-
 public void CompileProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
 {
 	CreateDirectory(destinationProtoDir);
