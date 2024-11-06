@@ -49,7 +49,7 @@ Task("GenerateProtoFiles")
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
 		var modifiedProtoDir = buildDir.Combine("modified_proto");
-		var patchedProtoFiles = PatchJavaProtoFiles(protoFiles, sourceProtoDir, modifiedProtoDir);
+		var patchedProtoFiles = GetProtoFiles(sourceProtoDir);
 
 		CompileProtoFiles(patchedProtoFiles, modifiedProtoDir, destinationProtoDir);
 	});
@@ -123,6 +123,13 @@ public ProcessSettings GetBuildCMakeSettings()
 
 	return cmakeBuildSettings;
 }
+
+IEnumerable<FileInfo> GetProtoFiles(string sourceProtoDir)
+{
+    return Directory.EnumerateFiles(sourceProtoDir, "*.proto", SearchOption.AllDirectories)
+                    .Select(filePath => new FileInfo(filePath));
+}
+
 
 public void CompileProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
 {
