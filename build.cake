@@ -40,18 +40,6 @@ Task("ExtractProtobuf")
 		Unzip(protocArchive, protocBinDir);
 	});
 
-Task("GenerateProtoFiles")
-	.IsDependentOn("ExtractProtobuf")
-	.Does(() =>
-	{
-		var sourceProtoDir = new DirectoryPath("./proto/").MakeAbsolute(Context.Environment);
-		var destinationProtoDir = new DirectoryPath("./src/main/java/").MakeAbsolute(Context.Environment);
-
-		var protoFiles = GetFiles("./proto/**/*.proto");
-
-		CompileProtoFiles(protoFiles, sourceProtoDir, destinationProtoDir);
-	});
-
 Task("Generate-Version-Info")
 	.Does(() =>
 	{
@@ -120,32 +108,6 @@ public ProcessSettings GetBuildCMakeSettings()
 			.AppendSwitch("--config", configuration));
 
 	return cmakeBuildSettings;
-}
-
-public void CompileProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
-{
-	CreateDirectory(destinationProtoDir);
-
-	var protocArguments = new ProcessSettings()
-		.WithArguments(args => args
-			.Append("-I=" + sourceProtoDir.FullPath)
-			.Append("--java_out=" + destinationProtoDir.FullPath));
-
-	foreach (var file in files)
-	{
-		protocArguments.WithArguments(args => args.Append(file.FullPath));
-	}
-
-	if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-	{
-		protocExe = "protoc";
-	}
-
-	var exitCode = StartProcess(protocExe, protocArguments);
-	if (exitCode != 0)
-	{
-		throw new Exception($"Error processing proto files, protoc exit code: {exitCode} ({protocArguments})");
-	}
 }
 
 public string GetVersionFromTag()
