@@ -49,7 +49,7 @@ Task("GenerateProtoFiles")
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
 		var modifiedProtoDir = buildDir.Combine("modified_proto");
-		var patchedProtoFiles = GetProtoFiles(sourceProtoDir);
+		var patchedProtoFiles = GetProtoFiles(new DirectoryPath(sourceProtoDir));
 
 		CompileProtoFiles(patchedProtoFiles, modifiedProtoDir, destinationProtoDir);
 	});
@@ -126,9 +126,7 @@ public ProcessSettings GetBuildCMakeSettings()
 
 IEnumerable<FileInfo> GetProtoFiles(string sourceProtoDir)
 {
-    return sourceProtoDir
-                   .GlobFiles("**/*.proto")
-                   .Select(file => file);
+    return sourceProtoDir.GlobFiles("**/*.proto") .ToList();
 }
 
 
