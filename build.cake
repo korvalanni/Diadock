@@ -49,7 +49,7 @@ Task("GenerateProtoFiles")
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
 
-		CompileProtoFiles(patchedProtoFiles, sourceProtoDir, destinationProtoDir);
+		CompileProtoFiles(protoFiles, sourceProtoDir, destinationProtoDir);
 	});
 
 Task("Generate-Version-Info")
