@@ -124,7 +124,7 @@ public ProcessSettings GetBuildCMakeSettings()
 	return cmakeBuildSettings;
 }
 
-IEnumerable<FileInfo> GetProtoFiles(string sourceProtoDir)
+public IEnumerable<FileInfo> GetProtoFiles(DirectoryPath sourceProtoDir)
 {
     return sourceProtoDir.GlobFiles("**/*.proto") .ToList();
 }
