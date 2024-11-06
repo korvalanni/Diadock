@@ -126,7 +126,7 @@ public ProcessSettings GetBuildCMakeSettings()
 
 IEnumerable<FileInfo> GetProtoFiles(string sourceProtoDir)
 {
-    return return sourceProtoDir
+    return sourceProtoDir
                    .GlobFiles("**/*.proto")
                    .Select(file => file);
 }
