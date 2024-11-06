@@ -48,6 +48,7 @@ Task("GenerateProtoFiles")
 		var destinationProtoDir = new DirectoryPath("./src/main/java/").MakeAbsolute(Context.Environment);
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
+		var modifiedProtoDir = buildDir.Combine("modified_proto");
 
 		CompileProtoFiles(protoFiles, modifiedProtoDir, destinationProtoDir);
 	});
