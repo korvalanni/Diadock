@@ -75,7 +75,6 @@ Task("Check-Maven-Installed")
 Task("Package-With-Maven")
 	.IsDependentOn("Generate-Version-Info")
 	.IsDependentOn("Check-Maven-Installed")
-	.IsDependentOn("GenerateProtoFiles")
 	.Does(() =>
 	{
 		var exitCode = StartProcess(mvnTool, "-Dhttps.protocols=TLSv1.2 package");
