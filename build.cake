@@ -49,7 +49,7 @@ Task("GenerateProtoFiles")
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
 		var modifiedProtoDir = buildDir.Combine("modified_proto");
-		var patchedProtoFiles = GetProtoFiles(new DirectoryPath(sourceProtoDir));
+		var patchedProtoFiles = GetProtoFiles(sourceProtoDir);
 
 		CompileProtoFiles(patchedProtoFiles, modifiedProtoDir, destinationProtoDir);
 	});
