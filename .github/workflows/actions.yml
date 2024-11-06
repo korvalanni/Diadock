@@ -6,7 +6,7 @@ on:
 env:
   JCP_VERSION: 2.0.40450-A
   JCP_FILENAME_PREFIX: jcp-
-      
+
 jobs:
   build:
     runs-on: windows-2019
@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.x
-      
+
       - name: Setup Maven Action
         uses: s4u/setup-maven-action@v1.14.0
         with:
@@ -30,7 +30,7 @@ jobs:
         uses: nuget/setup-nuget@v2
         with:
           nuget-version: '5.x'
-          
+
       - run: nuget install secure-file -ExcludeVersion
       - run: ./secure-file/tools/secure-file.exe -decrypt ${{ env.JCP_FILENAME_PREFIX }}${{ env.JCP_VERSION }}.zip.enc -secret ${{ secrets.DIADOC_SIGNING_SECRET }}
 
@@ -47,7 +47,8 @@ jobs:
         working-directory: ./${{ env.JCP_FILENAME_PREFIX }}${{ env.JCP_VERSION }}
       - run: mvn install:install-file -Dfile="JCryptoP.jar" -DgroupId="ru.CryptoPro" -DartifactId="JCryptoP" -Dversion="${{ env.JCP_VERSION }}" -Dpackaging="jar"
         working-directory: ./${{ env.JCP_FILENAME_PREFIX }}${{ env.JCP_VERSION }}
-      
+      - run: mvn package
+
       - name: Run the build script
         uses: cake-build/cake-action@v2
         env:
