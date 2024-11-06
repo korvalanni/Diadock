@@ -125,23 +125,34 @@ public ProcessSettings GetBuildCMakeSettings()
 }
 
 public IEnumerable<FilePath> PatchJavaProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
-{
-	foreach (var file in files)
-	{
-		var relativeFile = sourceProtoDir.GetRelativePath(file);
-		var destinationFile = destinationProtoDir.CombineWithFilePath(relativeFile);
-		var destinationDirectory = destinationFile.GetDirectory();
-		if (!DirectoryExists(destinationDirectory))
-			CreateDirectory(destinationDirectory);
+ {
+     foreach (var file in files)
+     {
+         var relativeFile = sourceProtoDir.GetRelativePath(file);
+         var destinationFile = destinationProtoDir.CombineWithFilePath(relativeFile);
+         var destinationDirectory = destinationFile.GetDirectory();
 
-		CopyFile(file, destinationFile);
-		var javaOuterClassName = relativeFile.GetFilenameWithoutExtension().FullPath
-			.Replace("-", "_")
-			.Replace(".", "_");
-		System.IO.File.AppendAllText(destinationFile.FullPath, string.Format("\n\noption java_outer_classname = \"{0}Protos\";", javaOuterClassName));
-		yield return destinationFile;
-	}
-}
+         if (!DirectoryExists(destinationDirectory))
+             CreateDirectory(destinationDirectory);
+
+         CopyFile(file, destinationFile);
+
+         var fileContents = System.IO.File.ReadAllText(destinationFile.FullPath);
+
+         var javaOuterClassName = relativeFile.GetFilenameWithoutExtension().FullPath
+             .Replace("-", "_")
+             .Replace(".", "_");
+
+         if (!fileContents.Contains("option java_outer_classname"))
+         {
+             var option = string.Format("\n\noption java_outer_classname = \"{0}Protos\";", javaOuterClassName);
+             System.IO.File.AppendAllText(destinationFile.FullPath, option);
+         }
+
+         yield return destinationFile;
+     }
+ }
+
 
 public void CompileProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
 {
