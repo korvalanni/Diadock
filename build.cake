@@ -48,10 +48,8 @@ Task("GenerateProtoFiles")
 		var destinationProtoDir = new DirectoryPath("./src/main/java/").MakeAbsolute(Context.Environment);
 
 		var protoFiles = GetFiles("./proto/**/*.proto");
-		var modifiedProtoDir = buildDir.Combine("modified_proto");
-		var patchedProtoFiles = GetProtoFiles(sourceProtoDir);
 
-		CompileProtoFiles(patchedProtoFiles, modifiedProtoDir, destinationProtoDir);
+		CompileProtoFiles(protoFiles, modifiedProtoDir, destinationProtoDir);
 	});
 
 Task("Generate-Version-Info")
@@ -123,12 +121,6 @@ public ProcessSettings GetBuildCMakeSettings()
 
 	return cmakeBuildSettings;
 }
-
-public IEnumerable<FileInfo> GetProtoFiles(DirectoryPath sourceProtoDir)
-{
-    return sourceProtoDir.Glob("**/*.proto").Select(file => new FilePath(file.FullPath)).ToList();
-}
-
 
 public void CompileProtoFiles(IEnumerable<FilePath> files, DirectoryPath sourceProtoDir, DirectoryPath destinationProtoDir)
 {
