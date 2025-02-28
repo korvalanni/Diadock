@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>ru.kontur.diadoc</groupId>
     <artifactId>diadocsdk</artifactId>
-    <version>3.20.0-dev.5296.26860</version>
+    <version>3.27.3</version>
 
     <packaging>jar</packaging>
 
@@ -14,7 +14,6 @@
         <httpClient.version>4.5.6</httpClient.version>
         <fluent-hc.version>4.5.10</fluent-hc.version>
         <commons-io.version>2.6</commons-io.version>
-        <juint.version>4.12</juint.version>
         <gson.version>2.8.5</gson.version>
         <json.version>20180813</json.version>
         <mail.version>1.4.7</mail.version>
@@ -25,7 +24,10 @@
         <asn1p.version>2.0.40450-A</asn1p.version>
         <jcryptop.version>2.0.40450-A</jcryptop.version>
 
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.8.6</maven-compiler-plugin.version>
+        <os-maven-plugin.version>1.5.0.Final</os-maven-plugin.version>
+        <protobuf-maven-plugin.version>0.5.0</protobuf-maven-plugin.version>
+        <maven-wrapper-plugin.version>3.2.0</maven-wrapper-plugin.version>
     </properties>
 
     <dependencies>
@@ -36,6 +38,7 @@
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
         </dependency>
+
 
         <!-- http://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
@@ -56,13 +59,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
-        </dependency>
-
-        <!-- http://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${juint.version}</version>
         </dependency>
 
         <!-- http://mvnrepository.com/artifact/com.google.code.gson/gson -->
@@ -120,9 +116,19 @@
             <artifactId>annotations</artifactId>
             <version>${annotations.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
+        <extensions>
+            <!-- https://mvnrepository.com/artifact/kr.motd.maven/os-maven-plugin -->
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin.version}</version>
+            </extension>
+        </extensions>
+
         <plugins>
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
             <plugin>
@@ -148,6 +154,80 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+
+            <!-- https://mvnrepository.com/artifact/org.xolstice.maven.plugins/protobuf-maven-plugin -->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${protobuf-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <protoSourceRoot>${project.basedir}/proto</protoSourceRoot>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                    <useArgumentFile>true</useArgumentFile>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-wrapper-plugin</artifactId>
+                <version>${maven-wrapper-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install-wrapper</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>wrapper</goal>
+                        </goals>
+                        <configuration>
+                            <mavenVersion>${maven-compiler-plugin.version}</mavenVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>install-wrapper</id>
+            <activation>
+                <file>
+                    <exists>${project.basedir}/.mvn/wrapper/maven-wrapper.jar</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-wrapper-plugin</artifactId>
+                        <version>${maven-wrapper-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>install-wrapper</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>wrapper</goal>
+                                </goals>
+                                <configuration>
+                                    <mavenVersion>${maven-compiler-plugin.version}</mavenVersion>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
