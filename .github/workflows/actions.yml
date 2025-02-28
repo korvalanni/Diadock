@@ -21,6 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Clean maven cache
+        run: mvn clean
+
       - name: Decrypt and Extract JCP Archive
         run: |
           openssl enc -d -aes-256-cbc \
