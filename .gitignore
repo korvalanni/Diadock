@@ -66,3 +66,6 @@ fabric.properties
 
 #jcp
 jcp-*
+
+#maven-wrapper
+.mvn/wrapper/
