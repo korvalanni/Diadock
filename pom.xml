@@ -24,7 +24,7 @@
         <asn1p.version>2.0.40450-A</asn1p.version>
         <jcryptop.version>2.0.40450-A</jcryptop.version>
 
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.8.6</maven-compiler-plugin.version>
         <os-maven-plugin.version>1.5.0.Final</os-maven-plugin.version>
         <protobuf-maven-plugin.version>0.5.0</protobuf-maven-plugin.version>
         <maven-wrapper-plugin.version>3.2.0</maven-wrapper-plugin.version>
