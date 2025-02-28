@@ -68,6 +68,6 @@ fabric.properties
 jcp-*
 
 #maven-wrapper
-.mvn/wrapper/
+.mvn
 mvnw
 mvnw.cmd
