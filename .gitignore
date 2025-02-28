@@ -69,3 +69,5 @@ jcp-*
 
 #maven-wrapper
 .mvn/wrapper/
+mvnw
+mvnw.cmd
