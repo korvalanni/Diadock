@@ -15,14 +15,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.14.0
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: 17
+          maven-version: 3.9.8
 
-      - name: Clean maven cache
-        run: mvn clean
 
       - name: Decrypt and Extract JCP Archive
         run: |
@@ -44,7 +42,7 @@ jobs:
 
           for jar in "${jars[@]}"; do
             set -- $jar
-            ./mvnw install:install-file \
+            mvn install:install-file \
               -Dfile=./${{ env.JCP_FILENAME_PREFIX }}${{ env.JCP_VERSION }}/$1 \
               -DgroupId=$2 \
               -DartifactId=$3 \
@@ -53,7 +51,7 @@ jobs:
           done
 
       - name: Run the build script
-        run: ./mvnw package
+        run: mvn package
         env:
           github_ref_type: ${{ github.ref_type }}
 
